@@ -49,7 +49,7 @@ module KnifeDnsUpdate
     end
 
     def run
-      @cfg = KnifeDNS::Config.new('config/dns.rb')
+      @cfg = Config.new('config/dns.rb')
 
       Chef::Node.list.keys.sort.map(&Chef::Node.method(:load)).each do |node|
         entry(node.name.gsub(/[^a-z0-9-]+/, '-'), *cfg.record_for_node(node))
