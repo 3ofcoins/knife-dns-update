@@ -81,7 +81,13 @@ module KnifeDnsUpdate
         end
       end
 
-      dns = Fog::DNS.new(Chef::Config[:dns])
+      dns_config = Chef::Config[:dns].dup
+      dns_config[:provider] ||= 'AWS'
+      if dns_config[:provider] == 'AWS'
+        dns_config[:aws_access_key_id] ||= config[:aws_access_key_id]
+        dns_config[:aws_secret_access_key] ||= config[:aws_secret_access_key]
+      end
+      dns = Fog::DNS.new(dns_config)
       zone = dns.zones.find { |z| z.domain = cfg.zone }
       raise "No zone found for #{cfg.zone}; available zones: #{dns.zones.map(&:domain).join(', ')}" unless zone
 
