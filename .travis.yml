@@ -1,13 +1,21 @@
+---
 bundler_args: --without developer_workstation
 script: bundle exec thor spec:ci
 rvm:
-  - 1.8.7
-  - 1.9.2
-  - 1.9.3
-  - 2.0.0
-  - ree
-  - jruby-18mode
-  - jruby-19mode
-  - jruby-head
-  - rbx-18mode
-  - rbx-19mode
+- 1.8.7
+- 1.9.2
+- 1.9.3
+- 2.0.0
+- ree
+- jruby-18mode
+- jruby-19mode
+- jruby-head
+- rbx-18mode
+- rbx-19mode
+notifications:
+  hipchat:
+    secure: ! 'XggFlX0Al0nEMLl0X3Fsyr8X5NSdXwfyhBhKg3bskYoKzbIcexA8eDJBiuSa
+
+      ych7knx0SI/Dzhvs+WnQjWyBhu5VwHBnQvBxMGqVZ71WLn7IbzAME1W8q0b0
+
+      mRzkvCIRWuMaPz3m24LuTyga9w0XB1AFN5+tlP6fCuYXglCOYws='
