@@ -21,7 +21,7 @@ module KnifeDnsUpdate
       end
     end
 
-    option(:zone) { |domain| domain.sub(/^\.*/, '') }
+    option(:zone) { |domain| domain.gsub(/^\.*|\.*$/, '') }
     option :subdomain
     option :ttl, 3600
     attr_reader :entries
@@ -53,15 +53,15 @@ module KnifeDnsUpdate
       entries[name] << opt
     end
 
-    def record_for_node(node)
+    def record_for_node(node, is_root_record=false)
       case
       when block_given?
         yield node
-      when node['cloud'] && node['cloud']['public_hostname']
+      when !is_root_record && node['cloud'] && node['cloud']['public_hostname']
         [ :cname, node['cloud']['public_hostname'] ]
       when node['cloud'] && node['cloud']['public_ipv4']
         [ :a, node['cloud']['public_ipv4'] ]
-      when node['fqdn'] && node['fqdn'] !~ /#{Regexp.escape(zone)}$/
+      when !is_root_record && node['fqdn'] && node['fqdn'] !~ /#{Regexp.escape(zone)}$/
         [ :cname, node['fqdn'] ]
       when node['ipaddress']
         [ :a, node['ipaddress'] ]

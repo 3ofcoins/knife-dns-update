@@ -66,16 +66,18 @@ module KnifeDnsUpdate
             entry(name, *opts[:block].call)
           end
 
+          is_root_record = (name == '@')
+
           if opts[:node]
             entry(name, *cfg.record_for_node(
-              Chef::Node.get(opts[:node]), &opts[:block]))
+              Chef::Node.load(opts[:node]), is_root_record, &opts[:block]))
           end
 
           if opts[:query]
             q = Chef::Search::Query.new
             q.search(:node, opts[:query]).first.each do |node|
               entry( name.sub('*', cfg.personalization_token(node)),
-                     *cfg.record_for_node(node, &opts[:block]))
+                     *cfg.record_for_node(node, is_root_record, &opts[:block]))
             end
           end
         end
@@ -88,7 +90,7 @@ module KnifeDnsUpdate
         dns_config[:aws_secret_access_key] ||= config[:aws_secret_access_key]
       end
       dns = Fog::DNS.new(dns_config)
-      zone = dns.zones.find { |z| z.domain == cfg.zone }
+      zone = dns.zones.find { |z| z.domain =~ /#{Regexp.quote(cfg.zone)}\.?$/ }
       raise "No zone found for #{cfg.zone}; available zones: #{dns.zones.map(&:domain).join(', ')}" unless zone
 
       managed = Set.new
@@ -96,7 +98,7 @@ module KnifeDnsUpdate
       zone.records.each do |rec|
         ui.info("Looking at: #{rec.name} IN #{rec.type} #{rec.value}") if config[:verbosity] >= 3
 
-        if cfg.subdomain && rec.name !~ /#{Regex.quote(cfg.subdomain)}\.#{Regex.quote(cfg.zone)}\.?$/
+        if cfg.subdomain && rec.name !~ /#{Regexp.quote(cfg.subdomain)}\.#{Regexp.quote(cfg.zone)}\.?$/
           ui.info("Not in subdomain, skipping: #{rec.name} IN #{rec.type} #{rec.value}") if config[:verbosity] >= 2
           next
         end
