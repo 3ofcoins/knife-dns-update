@@ -88,7 +88,7 @@ module KnifeDnsUpdate
         dns_config[:aws_secret_access_key] ||= config[:aws_secret_access_key]
       end
       dns = Fog::DNS.new(dns_config)
-      zone = dns.zones.find { |z| z.domain = cfg.zone }
+      zone = dns.zones.find { |z| z.domain == cfg.zone }
       raise "No zone found for #{cfg.zone}; available zones: #{dns.zones.map(&:domain).join(', ')}" unless zone
 
       managed = Set.new
