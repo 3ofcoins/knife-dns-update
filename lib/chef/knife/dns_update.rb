@@ -1,3 +1,4 @@
+require 'chef/config'
 require 'chef/knife'
 
 module KnifeDnsUpdate
@@ -124,4 +125,8 @@ module KnifeDnsUpdate
       end
     end
   end
+end
+
+class Chef::Config
+  default :dns, {}
 end
