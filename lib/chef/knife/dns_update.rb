@@ -100,7 +100,7 @@ module KnifeDnsUpdate
         ui.info("Looking at: #{rec.name} IN #{rec.type} #{rec.value}") if config[:verbosity] >= 3
 
         if cfg.subdomain && rec.name !~ /#{Regexp.quote(cfg.subdomain)}\.#{Regexp.quote(cfg.zone)}\.?$/
-          ui.info("Not in subdomain, skipping: #{rec.name} IN #{rec.type} #{rec.value}") if config[:verbosity] >= 2
+          ui.info("Not in subdomain, skipping: #{rec.name} IN #{rec.type} #{rec.value}") if config[:verbosity] >= 1
           next
         end
 

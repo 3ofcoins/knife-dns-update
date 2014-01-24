@@ -37,7 +37,7 @@ module KnifeDnsUpdate
       case opt
       when /^\d+\.\d+\.\d+\.\d+$/ then opt = { :a => opt }
       when /^[a-z0-9.-]+\.$/      then opt = { :cname => opt }
-      when /^[a-z0-9.-]+$/        then opt = { :cname => "#{opt}.#{zone}." }
+      when /^[a-z0-9.-]+$/        then opt = { :cname => [ opt, subdomain, zone ].compact.join('.') << '.' }
       when /^name:[a-z0-9.-]+$/   then opt = { :node => opt[5..-1] }
       when /:/                    then opt = { :query => opt }
       end

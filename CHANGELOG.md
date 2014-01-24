@@ -1,6 +1,10 @@
 Changes
 =======
 
+0.0.3
+-----
+ * Correctly handle subdomain
+
 0.0.2
 -----
  * Fix configuration
