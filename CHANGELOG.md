@@ -1,6 +1,10 @@
 Changes
 =======
 
+0.0.4
+-----
+ * Don't try to remove NS or SOA records
+
 0.0.3
 -----
  * Correctly handle subdomain
