@@ -57,7 +57,7 @@ module KnifeDnsUpdate
       case
       when block_given?
         yield node
-      when !is_root_record && node['cloud'] && node['cloud']['public_hostname']
+      when !is_root_record && node['cloud'] && node['cloud']['public_hostname'] && node['cloud']['public_hostname'].include?('.')
         [ :cname, node['cloud']['public_hostname'] ]
       when node['cloud'] && node['cloud']['public_ipv4']
         [ :a, node['cloud']['public_ipv4'] ]
