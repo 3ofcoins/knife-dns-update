@@ -96,7 +96,7 @@ module KnifeDnsUpdate
 
       managed = Set.new
 
-      zone.records.each do |rec|
+      zone.records.all!.each do |rec|
         next if %w(NS SOA).include? rec.type
         ui.info("Looking at: #{rec.name} IN #{rec.type} #{rec.value}") if config[:verbosity] >= 3
 
